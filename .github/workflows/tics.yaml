@@ -25,6 +25,7 @@ jobs:
           path: ${{ steps.build.outputs.snap }}
 
   tics-report:
+    needs: build
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
