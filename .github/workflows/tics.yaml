@@ -7,6 +7,23 @@ on:
       - main
 
 jobs:
+    build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify snap builds successfully
+        id: build
+        uses: canonical/action-build@v1
+
+      - name: Upload the built snap
+        uses: actions/upload-artifact@v4
+        with:
+          name: snap_artifact
+          path: ${{ steps.build.outputs.snap }}
+
   tics-report:
     runs-on: ubuntu-22.04
     steps:
@@ -21,7 +38,12 @@ jobs:
           python -m pip install --upgrade pip
           # pin tox to the current major version to avoid
           # workflows breaking all at once when a new major version is released.
-          python -m pip install 'tox<5'
+          python -m pip install 'tox<5'\
+
+      - name: Get the snap artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: snap_artifact 
 
       - name: Test with tox
         run: tox --workdir /tmp/tox run --result-json report/tox.json -e test-all
