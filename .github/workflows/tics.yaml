@@ -52,7 +52,7 @@ jobs:
       - name: Run TICS analysis
         uses: tiobe/tics-github-action@v3
         env:
-          PATH: "/tmp/tox/test-all"
+          PATH: "/tmp/tox/test-allbin:/snap/bin:/home/runner/.local/bin:/home/runner/.cargo/bin:/bin:/usr/bin:/usr/local/bin:"
         with:
           mode: qserver
           project: smartctl-exporter-snap
